@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <a href="style.css">stylesheet</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* Basic reset and font settings */
+      body {
+        font-family: "Arial", sans-serif;
+        line-height: 1.6;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+ 
+      /* Accordion container */
+      .accordion {
+        max-width: 600px;
+        margin: 0 auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        overflow: hidden;
+      }
+ 
+      /* Accordion item */
+      .accordion-item {
+        border-bottom: 1px solid #eaeaea;
+      }
+ 
+      .accordion-item:last-child {
+        border-bottom: none;
+      }
+ 
+      /* Accordion header */
+      .accordion-header {
+        padding: 15px 20px;
+        background-color: #ffffff;
+        cursor: pointer;
+        font-weight: 600;
+        position: relative;
+        transition: background-color 0.3s ease;
+      }
+ 
+      .accordion-header:hover {
+        background-color: #f9f9f9;
+      }
+ 
+      /* Add "+" icon for closed state */
+      .accordion-header::after {
+        content: "+";
+        position: absolute;
+        right: 20px;
+        font-size: 18px;
+        font-weight: 700;
+        transition: transform 0.3s ease;
+      }
+ 
+      /* Change to "−" when active (open) */
+      .accordion-item.active .accordion-header::after {
+        content: "−";
+        transform: rotate(0deg);
+      }
+ 
+      /* Accordion content */
+      .accordion-content {
+        padding: 0 20px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        background-color: #ffffff;
+      }
+ 
+      /* Active state styling for open items */
+      .accordion-item.active .accordion-header {
+        background-color: #f0f7ff;
+        color: #0066cc;
+      }
+ 
+      .accordion-item.active .accordion-content {
+        max-height: 200px; /* Adjust based on content height; using a fixed value for demo */
+        padding: 20px;
+      }
+ 
+      .accordion-content p {
+        margin: 15px 0;
+      }
+
+      /* Button styling for demo */
+      button {
+        padding: 8px 16px;
+        background-color: #0066cc;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #0052a3;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Container for the accordion (will be populated by JS) -->
+    <div id="accordion-container"></div>
+
+    <script>
+      // Function to create the accordion dynamically using JavaScript
+      function createAccordion() {
+        const container = document.getElementById('accordion-container');
+        
+        // Create the main accordion div
+        const accordion = document.createElement('div');
+        accordion.className = 'accordion';
+
+        // Data for the sections (you can modify this array to add more sections dynamically)
+        const sections = [
+          {
+            title: 'Section 1',
+            content: 'This is the content for section 1. It can contain any HTML elements.',
+            buttonText: 'Button 1',
+            isActive: true // Open by default
+          },
+          {
+            title: 'Section 2',
+            content: 'This is the content for section 2. It can contain any HTML elements.',
+            buttonText: 'Button 2',
+            isActive: false
+          },
+          {
+            title: 'Section 3',
+            content: 'This is the content for section 3. It can contain any HTML elements.',
+            buttonText: 'Button 3',
+            isActive: false
+          }
+        ];
+
+        // Loop through sections and create each accordion item
+        sections.forEach((section, index) => {
+          // Create accordion item div
+          const item = document.createElement('div');
+          item.className = `accordion-item ${section.isActive ? 'active' : ''}`;
+
+          // Create header div
+          const header = document.createElement('div');
+          header.className = 'accordion-header';
+          header.textContent = section.title;
+
+          // Create content div
+          const content = document.createElement('div');
+          content.className = 'accordion-content';
+
+          // Create paragraph with content
+          const p = document.createElement('p');
+          p.textContent = section.content;
+
+          // Create button paragraph
+          const buttonP = document.createElement('p');
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.textContent = section.buttonText;
+          buttonP.appendChild(button);
+
+          // Append content elements
+          content.appendChild(p);
+          content.appendChild(buttonP);
+
+          // Append header and content to item
+          item.appendChild(header);
+          item.appendChild(content);
+
+          // Append item to accordion
+          accordion.appendChild(item);
+        });
+
+        // Append accordion to container
+        container.appendChild(accordion);
+
+        // Add event listeners for accordion functionality
+        addAccordionFunctionality();
+      }
+
+      // Function to add click event listeners for accordion behavior
+      function addAccordionFunctionality() {
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+        accordionHeaders.forEach(header => {
+          header.addEventListener('click', function() {
+            const item = this.parentElement;
+            const isActive = item.classList.contains('active');
+
+            // Toggle active class on clicked item
+            if (isActive) {
+              item.classList.remove('active');
+            } else {
+              item.classList.add('active');
+            }
+
+            // Optional: Close all other items (uncomment if you want accordion behavior where only one is open at a time)
+            // accordionHeaders.forEach(otherHeader => {
+            //   if (otherHeader !== this) {
+            //     otherHeader.parentElement.classList.remove('active');
+            //   }
+            // });
+          });
+        });
+      }
+
+      // Initialize the accordion when the DOM is loaded
+      document.addEventListener('DOMContentLoaded', createAccordion);
+    </script>
+  </body>
+</html>
